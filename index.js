@@ -74,7 +74,9 @@ function roowterInject() {
 				initializeRouteButtons,
 			};
 		}
-	} catch (err) {}
+	} catch (err) {
+		//
+	}
 }
 
 roowterInject();
