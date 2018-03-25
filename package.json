@@ -1,0 +1,42 @@
+{
+  "name": "roowter",
+  "version": "1.0.0",
+  "description": "Router based on HTML and custom elements",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "cz-conventional-changelog": "^2.1.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.9.0",
+    "karma": "^2.0.0",
+    "karma-chai": "^0.1.0",
+    "karma-firefox-launcher": "^1.1.0",
+    "karma-mocha": "^1.3.0",
+    "karma-spec-reporter": "0.0.32",
+    "mocha": "^5.0.5"
+  },
+  "scripts": {
+    "test": "karma start",
+    "lint": "eslint *.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/20thbirdhouse/roowter.git"
+  },
+  "keywords": [
+    "router"
+  ],
+  "author": "thatlittlegit",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/20thbirdhouse/roowter/issues"
+  },
+  "homepage": "https://github.com/20thbirdhouse/roowter#readme",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
