@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+  - "8.10.0"
+
+before_install:
+  - npm install -g npm --loglevel info
+  - npm config set loglevel info --global
+
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+
+install:
+  # Really fast install
+  - npm ci
+
+script:
+  - npm run ci
