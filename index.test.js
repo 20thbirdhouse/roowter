@@ -127,4 +127,14 @@ describe('initializeRouteButtons', () => {
 		expect(document.getElementById('1').onclick).to.not.equal(null);
 		expect(document.getElementById('2').onclick).to.equal(null);
 	});
+
+	it('should throw an error if the \'destination\' attribute isn\'t defined', () => {
+		document.body.innerHTML = `
+		<div class="route-button"></div>`;
+
+		expect(() => {
+			initializeRouteButtons();
+			document.getElementsByClassName('route-button')[0].onclick();
+		}).to.throw(Error, /^Route button has no 'destination' attribute$/);
+	});
 });
