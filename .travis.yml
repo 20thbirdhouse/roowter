@@ -3,7 +3,6 @@ node_js:
   - "8.10.0"
 
 before_install:
-  - npm install -g npm --loglevel info
   - npm config set loglevel info --global
 
 before_script:
@@ -11,8 +10,7 @@ before_script:
   - sh -e /etc/init.d/xvfb start
 
 install:
-  # Really fast install
-  - npm ci
+  - npm i
 
 script:
   - npm run ci
