@@ -68,7 +68,7 @@ function initializeRouteButtons(elements) {
   */
 function roowterInject() {
 	try {
-		if (typeof module === 'undefined') {
+		if (typeof module !== 'undefined') {
 			module.exports = {
 				setRoute,
 				initializeRouteButtons,
