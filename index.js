@@ -7,7 +7,7 @@
   */
 function setRoute(route) {
 	const router = document.getElementById('router');
-	const routes = Array.from(router.children);
+	const routes = Array.from(router.children).filter(elem => elem.classList.contains('route'));
 	window.location.href = `${window.location.href.split('#')[0]}#${route}`;
 
 	let chosen = false;
