@@ -10,7 +10,7 @@ module.exports = (config) => {
 		concurrency: Infinity,
 
 		preprocessors: {
-			'roowter.js': ['coverage'],
+			'index.js': ['coverage'],
 		},
 		coverageReporter: {
 			type: 'lcov',
