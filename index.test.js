@@ -24,6 +24,19 @@ describe('setRoute', () => {
 		document.getElementById('test').getAttribute('hidden').should.not.equal(null);
 	});
 
+	it('should set aria-hidden attributes on all routes that do not match', () => {
+		document.body.innerHTML = `
+		<div id="router">
+			<div class="route" pattern="/"></div>
+			<div class="route" pattern="/lol" id="test"></div>
+		</div>`;
+
+		setRoute('/');
+		document.getElementById('test').getAttribute('aria-hidden').should.not.equal(null);
+		document.getElementById('test').getAttribute('aria-hidden').should.equal('true');
+	});
+
+
 	it('should unset hidden attributes as necessary on all routes', () => {
 		document.body.innerHTML = `
 		<div id="router">
@@ -43,6 +56,25 @@ describe('setRoute', () => {
 		expect(document.getElementById('3').getAttribute('hidden')).to.equal(null);
 	});
 
+	it('should unset hidden attributes as necessary on all routes', () => {
+		document.body.innerHTML = `
+		<div id="router">
+			<div class="route" pattern="^/$" id="1"></div>
+			<div class="route" pattern="^/lol$" id="2"></div>
+			<div class="route" pattern="^/foo$" id="3" hidden></div>
+		</div>`;
+
+		setRoute('/');
+		expect(document.getElementById('1').getAttribute('aria-hidden')).to.equal(null);
+		setRoute('/lol');
+		expect(document.getElementById('1').getAttribute('aria-hidden')).to.not.equal(null);
+		expect(document.getElementById('2').getAttribute('aria-hidden')).to.equal(null);
+		setRoute('/foo');
+		expect(document.getElementById('1').getAttribute('aria-hidden')).to.not.equal(null);
+		expect(document.getElementById('2').getAttribute('aria-hidden')).to.not.equal(null);
+		expect(document.getElementById('3').getAttribute('aria-hidden')).to.equal(null);
+	});
+
 	it('should select the fallback if no other route matches', () => {
 		document.body.innerHTML = `
 		<div id="router">
@@ -53,6 +85,8 @@ describe('setRoute', () => {
 		setRoute('qwertyuiopasdfghjklzxcvbnm');
 		expect(document.getElementById('test').getAttribute('hidden')).to.equal(null);
 		expect(document.getElementById('test2').getAttribute('hidden')).to.equal('hidden');
+		expect(document.getElementById('test').getAttribute('aria-hidden')).to.equal(null);
+		expect(document.getElementById('test2').getAttribute('aria-hidden')).to.equal('true');
 	});
 
 	it('should throw an error if no pattern attribute is provided', () => {
