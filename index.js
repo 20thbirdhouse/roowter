@@ -16,15 +16,18 @@ function setRoute(route) {
 			throw new Error('Route is missing a \'pattern\' attribute');
 		} else if (!chosen && route.search(new RegExp(routeElement.attributes.pattern.nodeValue)) + 1) {
 			routeElement.removeAttribute('hidden');
+			routeElement.removeAttribute('aria-hidden');
 			chosen = true;
 		} else {
 			routeElement.setAttribute('hidden', 'hidden');
+			routeElement.setAttribute('aria-hidden', 'true');
 		}
 	});
 
 	if (!chosen) {
 		routes.forEach((routeElement) => {
 			if (chosen !== true && routeElement.attributes.fallback) {
+				routeElement.removeAttribute('aria-hidden');
 				routeElement.removeAttribute('hidden');
 				chosen = true;
 			}
