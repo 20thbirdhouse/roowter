@@ -1,6 +1,6 @@
 {
   "name": "roowter",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Router based on HTML and custom elements",
   "main": "index.js",
   "dependencies": {},
