@@ -1,5 +1,5 @@
 /* eslint-env mocha, browser */
-/* globals expect setRoute onRouteSwitch initializeRouteButtons */
+/* globals expect _events:true setRoute onRouteSwitch initializeRouteButtons */
 
 describe('setRoute', () => {
 	it('should set location.href correctly', () => {
@@ -170,14 +170,14 @@ describe('onRouteSwitch', () => {
 
 
 	it('should create a unique ID for each event set', () => {
-		let found = [];
+		const found = [];
+		const duplicateRepeatTester = (entry) => {
+			_events[0].id.should.not.equal(entry);
+		};
 
-		for (let index = 0; index <= 100; index++) {
+		for (let index = 0; index <= 100; index += 1) {
 			onRouteSwitch(/^\/$/, () => {});
-
-			found.forEach(entry => {
-				_events[0].id.should.not.equal(entry);
-			});
+			found.forEach(duplicateRepeatTester);
 
 			found.push(_events[_events.length - 1]);
 		}
