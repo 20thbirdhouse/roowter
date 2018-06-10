@@ -1,4 +1,4 @@
-module.exports = (config) => {
+module.exports = config => {
 	config.set({
 		frameworks: ['chai', 'mocha'],
 		files: ['*.js'],
@@ -10,11 +10,11 @@ module.exports = (config) => {
 		concurrency: Infinity,
 
 		preprocessors: {
-			'index.js': ['coverage'],
+			'index.js': ['coverage']
 		},
 		coverageReporter: {
 			type: 'lcov',
-			dir: 'coverage/',
-		},
+			dir: 'coverage/'
+		}
 	});
 };

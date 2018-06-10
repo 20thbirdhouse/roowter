@@ -36,7 +36,6 @@ describe('setRoute', () => {
 		document.getElementById('test').getAttribute('aria-hidden').should.equal('true');
 	});
 
-
 	it('should unset hidden attributes as necessary on all routes', () => {
 		document.body.innerHTML = `
 		<div id="router">
@@ -168,10 +167,9 @@ describe('onRouteSwitch', () => {
 		_events = [];
 	});
 
-
 	it('should create a unique ID for each event set', () => {
 		const found = [];
-		const duplicateRepeatTester = (entry) => {
+		const duplicateRepeatTester = entry => {
 			_events[0].id.should.not.equal(entry);
 		};
 
