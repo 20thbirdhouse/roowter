@@ -9,3 +9,4 @@ rules:
     - "error"
     - "tab"
   no-tabs: 0
+  no-underscore-dangle: 0

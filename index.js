@@ -1,4 +1,21 @@
 /**
+  * Stores a event that is to be fired on a route change.
+  *
+  * @typedef {Object} Event
+  * @property {RegExp} regex - The regular expression to fire on.
+  * @property {Function} callback - The callback to run.
+  * @property {Number} id - Internal identifier for this event.
+  */
+
+/**
+  * The list of all events to be fired on a route change.
+  *
+  * @type {Event[]}
+  * @private
+  */
+let _events = [];
+
+/**
   * Sets the route by toggling the hidden attribute of the children of the
   * router.
   *
@@ -37,7 +54,45 @@ function setRoute(route) {
 		if (!chosen) throw new Error('No route matches requested route, and no fallback provided');
 	}
 
+	_events
+		.filter(event => route.search(event.regex) + 1)
+		.forEach(event => event.callback());
+
 	return route;
+}
+
+/**
+  * Event handler system for Roowter. Fires an event when a route passed to
+  * setRoute() matches a RegExp.
+  *
+  * @param {(RegExp|String)} regex - The regular expression to test for.
+  * @param {Function} callback - The callback to run.
+  * @param {Boolean} once - If `true`, removes it from the array after one run.
+  * @returns {Event} - The created event.
+  */
+function onRouteSwitch(regex, callback, once) {
+	const id = Math.random() * 2;
+	const pattern = regex instanceof RegExp ? regex : new RegExp(regex);
+
+	if (once) {
+		_events.push({
+			regex: pattern,
+			callback() {
+				callback();
+
+				_events = _events.filter(event => event.id !== id);
+			},
+			id,
+		});
+	} else {
+		_events.push({
+			regex: pattern,
+			callback,
+			id,
+		});
+	}
+
+	return _events[_events.length - 1];
 }
 
 /**
@@ -69,6 +124,7 @@ try {
 	if (typeof module !== 'undefined') {
 		module.exports = {
 			setRoute,
+			onRouteSwitch,
 			initializeRouteButtons,
 		};
 	}

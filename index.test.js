@@ -1,5 +1,5 @@
 /* eslint-env mocha, browser */
-/* globals expect setRoute initializeRouteButtons */
+/* globals expect setRoute onRouteSwitch initializeRouteButtons */
 
 describe('setRoute', () => {
 	it('should set location.href correctly', () => {
@@ -121,6 +121,92 @@ describe('setRoute', () => {
 		(() => {
 			setRoute('qwertyuiopasdfghjklzxcvbnm');
 		}).should.throw(Error, /^No route matches requested route, and no fallback provided$/);
+	});
+});
+
+describe('onRouteSwitch', () => {
+	it('should run the callback when the route matches a regex and the regex is a string', () => {
+		document.body.innerHTML = `
+		<div id="router">
+			<div class="route" pattern="^/foo$"></div>
+			<div class="route" pattern="^/bar$"></div>
+		</div>`;
+
+		let ok = false;
+		onRouteSwitch('^/bar$', () => {
+			ok = true;
+		});
+		setRoute('/foo');
+		ok.should.equal(false);
+		setRoute('/bar');
+		ok.should.equal(true);
+
+		_events = [];
+	});
+
+	it('should run the callback when the route matches a regex and the regex is a RegExp', () => {
+		document.body.innerHTML = `
+		<div id="router">
+			<div class="route" pattern="^/foo$"></div>
+			<div class="route" pattern="^/bar$"></div>
+		</div>`;
+
+		let ok = false;
+		onRouteSwitch(/^\/bar$/, () => {
+			ok = true;
+		});
+		setRoute('/foo');
+		ok.should.equal(false);
+		setRoute('/bar');
+		ok.should.equal(true);
+
+		_events = [];
+	});
+
+	it('should return the created Event', () => {
+		onRouteSwitch(/^\/$/, () => {}).should.equal(_events[0]);
+		_events = [];
+	});
+
+
+	it('should create a unique ID for each event set', () => {
+		let found = [];
+
+		for (let index = 0; index <= 100; index++) {
+			onRouteSwitch(/^\/$/, () => {});
+
+			found.forEach(entry => {
+				_events[0].id.should.not.equal(entry);
+			});
+
+			found.push(_events[_events.length - 1]);
+		}
+
+		_events = [];
+	});
+
+	it('should create a thunk removing it from _events if `once` is true', () => {
+		document.body.innerHTML = `
+		<div id="router">
+			<div class="route" pattern="^/$"></div>
+		</div>`;
+
+		onRouteSwitch(/^\/$/, () => {}, true);
+		expect(_events[0]).to.not.equal(undefined);
+		setRoute('/');
+		expect(_events[0]).to.equal(undefined);
+	});
+
+	it('should NOT create a thunk removing it from _events if `once` is false', () => {
+		document.body.innerHTML = `
+		<div id="router">
+			<div class="route" pattern="^/$"></div>
+		</div>`;
+
+		onRouteSwitch(/^\/$/, () => {});
+		expect(_events[0]).to.not.equal(undefined);
+		setRoute('/');
+		expect(_events[0]).to.not.equal(undefined);
 	});
 });
 
