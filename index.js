@@ -68,7 +68,7 @@ function setRoute(route) {
   *
   * @param {(RegExp|String)} regex - The regular expression to test for.
   * @param {Function} callback - The callback to run.
-  * @param {Boolean} once - If `true`, removes it from the array after one run.
+  * @param {Boolean} [once] - If `true`, removes it from the array after one run.
   */
 function onRouteSwitch(regex, callback, once) {
 	const id = Math.random() * 2;
@@ -100,7 +100,7 @@ function onRouteSwitch(regex, callback, once) {
   * <a href="https://medium.com/simple-human/b11e99ca374b">shouldn't overdo
   * it</a>.
   *
-  * @param {(HTMLElement[]|undefined)} elements - The elements to transform.
+  * @param {HTMLElement[]} [elements] - The elements to transform.
   * @returns {undefined}
   */
 function initializeRouteButtons(elements) {
