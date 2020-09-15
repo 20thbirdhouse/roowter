@@ -202,7 +202,7 @@ describe('onRouteSwitch', () => {
 
 	it('should create a unique ID for each event set', () => {
 		const found = [];
-		const duplicateRepeatTester = entry => {
+		const duplicateRepeatTester = (entry) => {
 			_events[0].id.should.not.equal(entry);
 		};
 
@@ -250,7 +250,7 @@ describe('initializeRouteButtons', () => {
 		expect(document.querySelector('#test').onclick).to.not.equal(null);
 	});
 
-	it('should update the route when a button\'s onclick is called', () => {
+	it("should update the route when a button's onclick is called", () => {
 		document.body.innerHTML = `
 		<div id="router">
 			<div class="route" pattern="^/$" hidden id="a"></div>
@@ -283,7 +283,7 @@ describe('initializeRouteButtons', () => {
 		expect(document.querySelector('#b').onclick).to.equal(null);
 	});
 
-	it('should throw an error if the \'destination\' attribute isn\'t defined', () => {
+	it("should throw an error if the 'destination' attribute isn't defined", () => {
 		document.body.innerHTML = `
 		<div class="route-button"></div>`;
 
