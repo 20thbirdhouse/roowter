@@ -162,11 +162,6 @@ describe('onRouteSwitch', () => {
 		_events = [];
 	});
 
-	it('should return the created Event', () => {
-		onRouteSwitch(/^\/$/, () => {}).should.equal(_events[0]);
-		_events = [];
-	});
-
 	it('should create a unique ID for each event set', () => {
 		const found = [];
 		const duplicateRepeatTester = entry => {

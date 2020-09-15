@@ -68,7 +68,6 @@ function setRoute(route) {
   * @param {(RegExp|String)} regex - The regular expression to test for.
   * @param {Function} callback - The callback to run.
   * @param {Boolean} once - If `true`, removes it from the array after one run.
-  * @returns {Event} - The created event.
   */
 function onRouteSwitch(regex, callback, once) {
 	const id = Math.random() * 2;
@@ -91,8 +90,6 @@ function onRouteSwitch(regex, callback, once) {
 			id,
 		});
 	}
-
-	return _events[_events.length - 1];
 }
 
 /**
