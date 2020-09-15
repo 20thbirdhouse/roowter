@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/20thbirdhouse/roowter.git"
+    "url": "https://github.com/thatlittlegit/roowter.git"
   },
   "keywords": [
     "router"
@@ -32,7 +32,7 @@
   "author": "thatlittlegit",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/20thbirdhouse/roowter/issues"
+    "url": "https://github.com/thatlittlegit/roowter/issues"
   },
-  "homepage": "https://github.com/20thbirdhouse/roowter#readme"
+  "homepage": "https://github.com/thatlittlegit/roowter#readme"
 }
