@@ -5,6 +5,7 @@
   * @property {RegExp} regex - The regular expression to fire on.
   * @property {Function} callback - The callback to run.
   * @property {Number} id - Internal identifier for this event.
+  * @private
   */
 
 /**
