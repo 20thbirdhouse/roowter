@@ -3,7 +3,6 @@ module.exports = config => {
 		frameworks: ['chai', 'mocha'],
 		files: ['*.js'],
 		reporters: ['spec', 'coverage'],
-		port: 9876,
 		colors: true,
 		browsers: ['Firefox'],
 		singleRun: true,
