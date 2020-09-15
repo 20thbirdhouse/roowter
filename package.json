@@ -7,7 +7,6 @@
   "devDependencies": {
     "chai": "^4.1.2",
     "codecov": "^3.0.2",
-    "cz-conventional-changelog": "^2.1.0",
     "karma": "^2.0.2",
     "karma-chai": "^0.1.0",
     "karma-coverage": "^1.1.2",
@@ -35,10 +34,5 @@
   "bugs": {
     "url": "https://github.com/20thbirdhouse/roowter/issues"
   },
-  "homepage": "https://github.com/20thbirdhouse/roowter#readme",
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  }
+  "homepage": "https://github.com/20thbirdhouse/roowter#readme"
 }
