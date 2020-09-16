@@ -18,7 +18,7 @@
   },
   "scripts": {
     "test": "karma start",
-    "lint": "xo",
+    "lint": "xo --prettier",
     "fix": "xo --fix --prettier"
   },
   "repository": {
