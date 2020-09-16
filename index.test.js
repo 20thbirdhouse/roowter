@@ -1,5 +1,5 @@
 /* eslint-env mocha, browser */
-/* globals expect _events:true setRoute onRouteSwitch initializeRouteButtons */
+/* globals expect setRoute onRouteSwitch initializeRouteButtons */
 
 describe('setRoute', () => {
 	it('should set location.href correctly', () => {
@@ -159,6 +159,44 @@ describe('setRoute', () => {
 			/^No route matches requested route, and no fallback provided$/
 		);
 	});
+
+	it('should switch routes correctly with multiple routers', () => {
+		document.body.innerHTML = `
+		<div id="router-a">
+			<div class="route" pattern="^/a$" id="aa" hidden></div>
+			<div class="route" pattern="^/b$" id="ab"></div>
+		</div>
+		<div id="router-b">
+			<div class="route" pattern="^/a$" id="ba"></div>
+			<div class="route" pattern="^/b$" id="bb" hidden></div>
+		</div>`;
+
+		/* eslint-disable no-unused-expressions */
+		setRoute('/a', '#router-a');
+		expect(document.querySelector('#aa').getAttribute('hidden')).to.be.null;
+		expect(document.querySelector('#ab').getAttribute('hidden')).to.not.be.null;
+		expect(document.querySelector('#ba').getAttribute('hidden')).to.be.null;
+		expect(document.querySelector('#bb').getAttribute('hidden')).to.not.be.null;
+
+		setRoute('/b', '#router-a');
+		expect(document.querySelector('#aa').getAttribute('hidden')).to.not.be.null;
+		expect(document.querySelector('#ab').getAttribute('hidden')).to.be.null;
+		expect(document.querySelector('#ba').getAttribute('hidden')).to.be.null;
+		expect(document.querySelector('#bb').getAttribute('hidden')).to.not.be.null;
+
+		setRoute('/a', '#router-b');
+		expect(document.querySelector('#aa').getAttribute('hidden')).to.not.be.null;
+		expect(document.querySelector('#ab').getAttribute('hidden')).to.be.null;
+		expect(document.querySelector('#ba').getAttribute('hidden')).to.be.null;
+		expect(document.querySelector('#bb').getAttribute('hidden')).to.not.be.null;
+
+		setRoute('/b', '#router-b');
+		expect(document.querySelector('#aa').getAttribute('hidden')).to.not.be.null;
+		expect(document.querySelector('#ab').getAttribute('hidden')).to.be.null;
+		expect(document.querySelector('#ba').getAttribute('hidden')).to.not.be.null;
+		expect(document.querySelector('#bb').getAttribute('hidden')).to.be.null;
+		/* eslint-enable no-unused-expressions */
+	});
 });
 
 describe('onRouteSwitch', () => {
@@ -177,8 +215,6 @@ describe('onRouteSwitch', () => {
 		ok.should.equal(false);
 		setRoute('/bar');
 		ok.should.equal(true);
-
-		_events = [];
 	});
 
 	it('should run the callback when the route matches a regex and the regex is a RegExp', () => {
@@ -196,48 +232,67 @@ describe('onRouteSwitch', () => {
 		ok.should.equal(false);
 		setRoute('/bar');
 		ok.should.equal(true);
-
-		_events = [];
 	});
 
 	it('should create a unique ID for each event set', () => {
-		const found = [];
-		const duplicateRepeatTester = (entry) => {
-			_events[0].id.should.not.equal(entry);
-		};
+		document.body.innerHTML = `
+		<div id="router">
+			<div class="route" pattern="^/$"></div>
+		</div>`;
+		const router = document.querySelector('#router');
 
+		const found = [];
 		for (let index = 0; index <= 100; index += 1) {
 			onRouteSwitch(/^\/$/, () => {});
-			found.forEach(duplicateRepeatTester);
+			found.forEach((entry) => {
+				entry.id.should.not.equal(index);
+			});
 
-			found.push(_events[_events.length - 1]);
+			found.push(router.events[router.events.length - 1]);
 		}
-
-		_events = [];
 	});
 
-	it('should create a thunk removing it from _events if `once` is true', () => {
+	it('should create a thunk removing it from events if `once` is true', () => {
 		document.body.innerHTML = `
 		<div id="router">
 			<div class="route" pattern="^/$"></div>
 		</div>`;
+		const router = document.querySelector('#router');
 
 		onRouteSwitch(/^\/$/, () => {}, true);
-		expect(_events[0]).to.not.equal(undefined);
+		expect(router.events[0]).to.not.equal(undefined);
 		setRoute('/');
-		expect(_events[0]).to.equal(undefined);
+		expect(router.events[0]).to.equal(undefined);
 	});
 
-	it('should NOT create a thunk removing it from _events if `once` is false', () => {
+	it('should NOT create a thunk removing it from events if `once` is false', () => {
 		document.body.innerHTML = `
 		<div id="router">
 			<div class="route" pattern="^/$"></div>
 		</div>`;
+		const router = document.querySelector('#router');
 
 		onRouteSwitch(/^\/$/, () => {});
-		expect(_events[0]).to.not.equal(undefined);
+		expect(router.events[0]).to.not.equal(undefined);
 		setRoute('/');
-		expect(_events[0]).to.not.equal(undefined);
+		expect(router.events[0]).to.not.equal(undefined);
+	});
+
+	it('should work correctly with multiple routers', () => {
+		document.body.innerHTML = `
+		<div id="a">
+			<div class="route" pattern="^/$"></div>
+		</div>
+		<div id="b">
+			<div class="route" pattern="^/$"></div>
+		</div>`;
+
+		onRouteSwitch(/^\/$/, () => {}, false, '#a');
+		expect(document.querySelector('#a').events[0]).to.not.equal(undefined);
+		expect(document.querySelector('#b').events).to.equal(undefined);
+		onRouteSwitch(/^\/$/, () => {}, false, '#b');
+		expect(document.querySelector('#a').events[0]).to.not.equal(undefined);
+		expect(document.querySelector('#b').events[0]).to.not.equal(undefined);
 	});
 });
 
@@ -291,5 +346,37 @@ describe('initializeRouteButtons', () => {
 			initializeRouteButtons();
 			document.querySelectorAll('.route-button')[0].onclick();
 		}).to.throw(Error, /^Route button has no 'destination' attribute$/);
+	});
+
+	it('should make the buttons, on click, go to whichever route on the instructed router', () => {
+		document.body.innerHTML = `
+		<div class="route-button" destination="/a"></div>
+		<div id="router-a">
+			<div id="aa" class="route" pattern="^/a$" hidden></div>
+			<div id="ab" class="route" pattern="^/b$" hidden></div>
+		</div>
+		<div id="router-b">
+			<div id="ba" class="route" pattern="^/a$" hidden></div>
+			<div id="bb" class="route" pattern="^/b$" hidden></div>
+		</div>`;
+
+		const btn = document.querySelector('.route-button');
+
+		/* eslint-disable no-unused-expressions */
+		initializeRouteButtons(undefined, '#router-a');
+		btn.click();
+		expect(document.querySelector('#aa').getAttribute('hidden')).to.be.null;
+		expect(document.querySelector('#ab').getAttribute('hidden')).to.not.be.null;
+		expect(document.querySelector('#ba').getAttribute('hidden')).to.not.be.null;
+		expect(document.querySelector('#bb').getAttribute('hidden')).to.not.be.null;
+
+		initializeRouteButtons(undefined, '#router-b');
+		btn.click();
+		expect(document.querySelector('#aa').getAttribute('hidden')).to.be.null;
+		expect(document.querySelector('#ab').getAttribute('hidden')).to.not.be.null;
+		expect(document.querySelector('#ba').getAttribute('hidden')).to.be.null;
+		expect(document.querySelector('#bb').getAttribute('hidden')).to.not.be.null;
+
+		/* eslint-enable no-unused-expressions */
 	});
 });

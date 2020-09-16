@@ -9,22 +9,59 @@
   */
 
 /**
-  * The list of all events to be fired on a route change.
+  * Finds the element corresponding to `name`:
   *
-  * @type {Event[]}
+  * 1. Returns `name` if it is an HTMLElement
+  * 2. Returns `querySelector(name)` if it's truthy
+  * 3. Returns #router or #js-router
+  *
+  * @param {(String|HTMLElement)} [name] - The element, or its name, or a falsy
+  *   value.
+  * @returns {HTMLElement} The corresponding HTMLElement.
+  * @throws `name` must be falsy or exist in the DOM.
   * @private
   */
-let _events = [];
+function findRoowter(name) {
+	const defaultRouter = document.querySelector('#router');
+	const defaultJsRouter = document.querySelector('#js-router');
+	const requestedRouter = typeof name === 'string'
+		? document.querySelector(name)
+		: null;
+
+	if (name instanceof HTMLElement) {
+		return name;
+	}
+
+	if (requestedRouter !== null) {
+		return document.querySelector(name);
+	}
+
+	if (defaultRouter !== null) {
+		return defaultRouter;
+	}
+
+	if (defaultJsRouter !== null) {
+		return defaultJsRouter;
+	}
+
+	throw new Error('Invalid router name');
+}
 
 /**
   * Sets the route by toggling the hidden attribute of the children of the
   * router.
   *
   * @param {String} route - The route to set.
+  * @param {(String|HTMLElement)} [router] The router element to use; defaults
+  *   to '#router' or '#js-router'. If a string, uses querySelector.
   * @returns {String} The passed route.
   */
-function setRoute(route) {
-	const router = document.getElementById('router') || document.getElementById('js-router');
+function setRoute(route, routerElem) {
+	const router = findRoowter(routerElem);
+	if (!router.events) {
+		router.events = [];
+	}
+
 	const routes = Array.from(router.children).filter(elem => elem.classList.contains('route') || elem.classList.contains('js-route'));
 	window.location.href = `${window.location.href.split('#')[0]}#${route}`;
 
@@ -55,7 +92,7 @@ function setRoute(route) {
 		if (!chosen) throw new Error('No route matches requested route, and no fallback provided');
 	}
 
-	_events
+	router.events
 		.filter(event => route.search(event.regex) + 1)
 		.forEach(event => event.callback());
 
@@ -69,23 +106,30 @@ function setRoute(route) {
   * @param {(RegExp|String)} regex - The regular expression to test for.
   * @param {Function} callback - The callback to run.
   * @param {Boolean} [once] - If `true`, removes it from the array after one run.
+  * @param {(String|HTMLElement)} [routerName] - The router element to use;
+  *   defaults to #router or #js-router.
   */
-function onRouteSwitch(regex, callback, once) {
+function onRouteSwitch(regex, callback, once, routerName) {
 	const id = Math.random() * 2;
 	const pattern = regex instanceof RegExp ? regex : new RegExp(regex);
 
+	const router = findRoowter(routerName);
+	if (!router.events) {
+		router.events = [];
+	}
+
 	if (once) {
-		_events.push({
+		router.events.push({
 			regex: pattern,
 			callback() {
 				callback();
 
-				_events = _events.filter(event => event.id !== id);
+				router.events = router.events.filter(event => event.id !== id);
 			},
 			id,
 		});
 	} else {
-		_events.push({
+		router.events.push({
 			regex: pattern,
 			callback,
 			id,
@@ -101,8 +145,12 @@ function onRouteSwitch(regex, callback, once) {
   * it</a>.
   *
   * @param {HTMLElement[]} [elements] - The elements to transform.
+  * @param {(HTMLElement|String)} [routerName] - The router to initialize
+  *   buttons for. Note that there is no way currently to specify *which*
+  *   router should get the buttons; calling initializeRouteButtons switches
+  *   them all over.
   */
-function initializeRouteButtons(elements) {
+function initializeRouteButtons(elements, routerName) {
 	(elements || Array.from(document.getElementsByClassName('route-button')))
 		.forEach((elem) => {
 			// eslint-disable-next-line no-param-reassign
@@ -110,7 +158,7 @@ function initializeRouteButtons(elements) {
 				if (!elem.attributes.destination) {
 					throw new Error('Route button has no \'destination\' attribute');
 				} else {
-					setRoute(elem.attributes.destination.nodeValue);
+					setRoute(elem.attributes.destination.nodeValue, routerName);
 				}
 			};
 		});
