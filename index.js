@@ -1,14 +1,4 @@
 /**
-  * Stores a event that is to be fired on a route change.
-  *
-  * @typedef {Object} Event
-  * @property {RegExp} regex - The regular expression to fire on.
-  * @property {Function} callback - The callback to run.
-  * @property {Number} id - Internal identifier for this event.
-  * @private
-  */
-
-/**
   * Finds the element corresponding to `name`:
   *
   * 1. Returns `name` if it is an HTMLElement
