@@ -178,13 +178,13 @@ describe('setRoute', () => {
 		expect(document.querySelector('#ba').getAttribute('hidden')).to.be.null;
 		expect(document.querySelector('#bb').getAttribute('hidden')).to.not.be.null;
 
-		setRoute('/b', '#router-a');
+		setRoute('/b', document.querySelector('#router-a'));
 		expect(document.querySelector('#aa').getAttribute('hidden')).to.not.be.null;
 		expect(document.querySelector('#ab').getAttribute('hidden')).to.be.null;
 		expect(document.querySelector('#ba').getAttribute('hidden')).to.be.null;
 		expect(document.querySelector('#bb').getAttribute('hidden')).to.not.be.null;
 
-		setRoute('/a', '#router-b');
+		setRoute('/a', document.querySelector('#router-b'));
 		expect(document.querySelector('#aa').getAttribute('hidden')).to.not.be.null;
 		expect(document.querySelector('#ab').getAttribute('hidden')).to.be.null;
 		expect(document.querySelector('#ba').getAttribute('hidden')).to.be.null;
@@ -196,6 +196,17 @@ describe('setRoute', () => {
 		expect(document.querySelector('#ba').getAttribute('hidden')).to.not.be.null;
 		expect(document.querySelector('#bb').getAttribute('hidden')).to.be.null;
 		/* eslint-enable no-unused-expressions */
+	});
+
+	it('should use #js-router if there is no #router router', () => {
+		document.body.innerHTML = `<div id="js-router">
+			<div class="route" pattern="^/foo$"></div>
+			<div class="route" pattern="^/bar$"></div>
+		</div>`;
+		setRoute('/foo');
+
+		/* eslint-disable-next-line no-unused-expressions */
+		document.querySelector('#js-router').events.should.exist;
 	});
 });
 
