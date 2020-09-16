@@ -26,6 +26,10 @@ function findRoowter(name) {
 		return document.querySelector(name);
 	}
 
+	if (name) {
+		throw new Error('Invalid router name');
+	}
+
 	if (defaultRouter !== null) {
 		return defaultRouter;
 	}
@@ -34,7 +38,7 @@ function findRoowter(name) {
 		return defaultJsRouter;
 	}
 
-	throw new Error('Invalid router name');
+	throw new Error('No router on page');
 }
 
 /**
