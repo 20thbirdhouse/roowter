@@ -101,7 +101,6 @@ function onRouteSwitch(regex, callback, once) {
   * it</a>.
   *
   * @param {HTMLElement[]} [elements] - The elements to transform.
-  * @returns {undefined}
   */
 function initializeRouteButtons(elements) {
 	(elements || Array.from(document.getElementsByClassName('route-button')))
