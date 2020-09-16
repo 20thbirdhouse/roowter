@@ -1,4 +1,4 @@
-declare function setRoute(route: string, router?: HTMLElement | string): string;
+declare function setRoute(route: string, router?: HTMLElement | string): void;
 declare function onRouteSwitch(
 	regex: RegExp | string,
 	callback: () => any,

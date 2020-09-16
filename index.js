@@ -54,7 +54,6 @@ function findRoowter(name) {
   * @param {String} route - The route to set.
   * @param {(String|HTMLElement)} [router] The router element to use; defaults
   *   to '#router' or '#js-router'. If a string, uses querySelector.
-  * @returns {String} The passed route.
   */
 function setRoute(route, routerElem) {
 	const router = findRoowter(routerElem);
@@ -95,8 +94,6 @@ function setRoute(route, routerElem) {
 	router.events
 		.filter(event => route.search(event.regex) + 1)
 		.forEach(event => event.callback());
-
-	return route;
 }
 
 /**
