@@ -160,6 +160,19 @@ describe('setRoute', () => {
 		);
 	});
 
+	it('should throw if an invalid router is specified', () => {
+		(() => {
+			setRoute('/abcd', '#abcd');
+		}).should.throw(Error, /^Invalid router name$/);
+	});
+
+	it('should throw if there is no router on the page', () => {
+		document.body.innerHTML = '';
+		(() => {
+			setRoute('/abcd');
+		}).should.throw(Error, /^No router on page$/);
+	});
+
 	it('should switch routes correctly with multiple routers', () => {
 		document.body.innerHTML = `
 		<div id="router-a">
