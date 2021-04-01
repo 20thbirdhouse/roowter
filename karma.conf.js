@@ -4,7 +4,7 @@ module.exports = (config) => {
 		files: ['*.js'],
 		reporters: ['spec', 'coverage'],
 		colors: true,
-		browsers: ['Firefox'],
+		browsers: ['FirefoxHeadless'],
 		singleRun: true,
 		concurrency: Infinity,
 

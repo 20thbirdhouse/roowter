@@ -4,15 +4,6 @@ node_js:
   - 14
   - 12
 
-addons:
-    apt:
-        packages:
-            - xvfb
-
-before_script:
-  - export DISPLAY=:99.0
-  - nohup Xvfb :99 &
-
 install:
   - npm i
 
