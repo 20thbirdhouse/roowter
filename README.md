@@ -1,4 +1,4 @@
-# Roowter [![Travis CI](https://img.shields.io/travis/thatlittlegit/roowter.svg)](https://travis-ci.org/thatlittlegit/roowter)[![Codecov](https://img.shields.io/codecov/c/github/thatlittlegit/roowter.svg)](https://codecov.io/gh/thatlittlegit/roowter)[![Inch CI](https://inch-ci.org/github/thatlittlegit/roowter.svg)](https://inch-ci.org/github/thatlittlegit/roowter)
+# Roowter [![GitHub Actions](https://github.com/thatlittlegit/roowter/workflows/build/ci.svg)](https://travis-ci.org/thatlittlegit/roowter)[![Codecov](https://img.shields.io/codecov/c/github/thatlittlegit/roowter.svg)](https://codecov.io/gh/thatlittlegit/roowter)[![Inch CI](https://inch-ci.org/github/thatlittlegit/roowter.svg)](https://inch-ci.org/github/thatlittlegit/roowter)
 Roowter is a simple and fast router built in JavaScript that works off HTML
 classes and IDs.
 
