@@ -6,7 +6,7 @@ module.exports = (config) => {
 		colors: true,
 		browsers: ['FirefoxHeadless'],
 		singleRun: true,
-		concurrency: Infinity,
+		concurrency: Number.POSITIVE_INFINITY,
 
 		preprocessors: {
 			'index.js': ['coverage']

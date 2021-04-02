@@ -268,9 +268,10 @@ describe('onRouteSwitch', () => {
 		const found = [];
 		for (let index = 0; index <= 100; index += 1) {
 			onRouteSwitch(/^\/$/, () => {});
-			found.forEach((entry) => {
+
+			for (const entry of found) {
 				entry.id.should.not.equal(index);
-			});
+			}
 
 			found.push(router.events[router.events.length - 1]);
 		}
